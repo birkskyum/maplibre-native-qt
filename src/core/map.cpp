@@ -14,7 +14,7 @@
 
 #include <mbgl/actor/scheduler.hpp>
 #include <mbgl/annotation/annotation.hpp>
-#include <mbgl/gl/custom_layer.hpp>
+#include <mbgl/style/layers/custom_layer.hpp>
 #include <mbgl/map/camera.hpp>
 #include <mbgl/map/map.hpp>
 #include <mbgl/map/map_options.hpp>
@@ -1292,6 +1292,7 @@ void Map::addCustomLayer(const QString &id, std::unique_ptr<CustomLayerHostInter
             renderParams.bearing = params.bearing;
             renderParams.pitch = params.pitch;
             renderParams.fieldOfView = params.fieldOfView;
+            renderParams.projectionMatrix = params.projectionMatrix;
             ptr->render(renderParams);
         }
 

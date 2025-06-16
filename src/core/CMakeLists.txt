@@ -4,6 +4,12 @@ set(MLN_QT_LIBRARY_ONLY ON CACHE BOOL "Build only MapLibre Native Core Qt bindin
 if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(MLN_QT_WITH_INTERNAL_SQLITE ON CACHE BOOL "Build MapLibre Native Core with internal sqlite" FORCE)
 endif()
+# Enable additional GPU backends provided by newer MapLibre Native versions
+set(MLN_WITH_OPENGL ON CACHE BOOL "Build MapLibre Native Core with OpenGL renderer" FORCE)
+set(MLN_WITH_VULKAN ON CACHE BOOL "Build MapLibre Native Core with Vulkan renderer" FORCE)
+if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    set(MLN_WITH_METAL ON CACHE BOOL "Build MapLibre Native Core with Metal renderer" FORCE)
+endif()
 set(MLN_CORE_PATH "${PROJECT_SOURCE_DIR}/vendor/maplibre-native" CACHE STRING "MapLibre Native Core source path" FORCE)
 
 # Build MapLibre Native Core
