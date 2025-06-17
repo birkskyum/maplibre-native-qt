@@ -3,7 +3,15 @@ string(TOLOWER ${MLN_QT_NAME}Widgets MLN_QT_WIDGETS_LOWERCASE)
 set(MLNQtWidgets_Headers
     export_widgets.hpp
     gl_widget.hpp
+    render_surface.hpp
 )
+
+if(Qt6_FOUND AND NOT "${CMAKE_SYSTEM_NAME}" STREQUAL "Emscripten")
+    list(APPEND MLNQtWidgets_Headers rhi_widget.hpp)
+    set(MLNQtWidgets_RHI_SRC rhi_widget.cpp)
+    set(MLNQtWidgets_USE_RHI TRUE)
+endif()
+
 # Header generation
 mln_umbrella_header_preprocess(${MLN_QT_WIDGETS_LOWERCASE} ${MLN_QT_NAME}Widgets HeaderOut)
 list(APPEND MLNQtWidgets_Headers_Generated ${HeaderOut})
@@ -35,6 +43,7 @@ target_sources(
         ${MLNQtWidgets_Headers}
         gl_widget.cpp
         gl_widget_p.hpp
+        ${MLNQtWidgets_RHI_SRC}
 
         $<$<PLATFORM_ID:Windows>:${CMAKE_BINARY_DIR}/version_info.rc>
 )
@@ -67,10 +76,10 @@ target_compile_definitions(
 target_include_directories(
     MLNQtWidgets
     PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
     PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}
-        ${CMAKE_CURRENT_BINARY_DIR}/include
         ${CMAKE_SOURCE_DIR}/src/core
         ${CMAKE_BINARY_DIR}/src/core/include
 )
@@ -89,12 +98,16 @@ if(Qt6_FOUND)
         MLNQtWidgets
         PUBLIC
             Qt${QT_VERSION_MAJOR}::OpenGLWidgets
+            Qt${QT_VERSION_MAJOR}::Gui
+            $<$<BOOL:${MLNQtWidgets_USE_RHI}>:Qt${QT_VERSION_MAJOR}::GuiPrivate>
     )
 else()
     target_link_libraries(
         MLNQtWidgets
         PUBLIC
             Qt${QT_VERSION_MAJOR}::OpenGL
+            Qt${QT_VERSION_MAJOR}::Gui
+            $<$<BOOL:${MLNQtWidgets_USE_RHI}>:Qt${QT_VERSION_MAJOR}::GuiPrivate>
     )
 endif()
 

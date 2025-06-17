@@ -13,6 +13,7 @@
 #include <QOpenGLWidget>
 
 #include <memory>
+#include "render_surface.hpp"
 
 QT_BEGIN_NAMESPACE
 
@@ -26,7 +27,7 @@ namespace QMapLibre {
 
 class GLWidgetPrivate;
 
-class Q_MAPLIBRE_WIDGETS_EXPORT GLWidget : public QOpenGLWidget {
+class Q_MAPLIBRE_WIDGETS_EXPORT GLWidget : public QOpenGLWidget, public RenderSurface {
     Q_OBJECT
 
 public:
@@ -34,6 +35,15 @@ public:
     ~GLWidget() override;
 
     Map *map();
+
+    // RenderSurface implementation
+    QSize surfaceSize() const override { return size(); }
+    qreal devicePixelRatio() const override { return QOpenGLWidget::devicePixelRatioF(); }
+    quint32 defaultFramebufferObject() const override { return QOpenGLWidget::defaultFramebufferObject(); }
+
+    void beginFrame() override { /* no-op for QOpenGLWidget */ }
+    void endFrame() override   { /* no-op for QOpenGLWidget */ }
+    QWidget *ownerWidget() const override { return const_cast<GLWidget *>(this); }
 
 signals:
     void onMouseDoubleClickEvent(QMapLibre::Coordinate coordinate);

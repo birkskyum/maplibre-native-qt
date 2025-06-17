@@ -34,6 +34,7 @@ target_link_libraries(
     QMapLibreExampleWidgets
     PRIVATE
         QMapLibre::Widgets
+        $<$<AND:$<BOOL:${Qt6_FOUND}>,$<NOT:$<PLATFORM_ID:Emscripten>>>:Qt${QT_VERSION_MAJOR}::GuiPrivate>
 )
 
 install(TARGETS QMapLibreExampleWidgets

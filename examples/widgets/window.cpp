@@ -22,7 +22,15 @@ Window::Window(MainWindow *mainWindow)
     settings.setDefaultZoom(5);
     settings.setDefaultCoordinate(QMapLibre::Coordinate(43, 21));
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 6, 0)
+#ifdef USE_RHI_WIDGET
+    m_glWidget = std::make_unique<QMapLibre::RhiWidget>(settings);
+#else
     m_glWidget = std::make_unique<QMapLibre::GLWidget>(settings);
+#endif
+#else
+    m_glWidget = std::make_unique<QMapLibre::GLWidget>(settings);
+#endif
 
     m_layout = std::make_unique<QVBoxLayout>(this);
     m_layout->addWidget(m_glWidget.get());
