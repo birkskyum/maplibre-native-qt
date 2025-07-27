@@ -1,5 +1,10 @@
 ![MapLibre Logo](https://maplibre.org/img/maplibre-logo-big.svg)
 
+> [!NOTE] 
+> ## Compatibility branch for OpenGL 2
+>
+> This branch is kept in sync with https://github.com/maplibre/maplibre-native/tree/opengl-2
+
 # maplibre-native-qt
 
 MapLibre Native Qt bindings and Qt Location MapLibre Plugin
